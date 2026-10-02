@@ -1,0 +1,44 @@
+HSRP Configuration
+-2 routers 
+-1 switch
+-2 PCs
+
+#Configure R1
+int g0/0
+ip address 192.168.10.1 255.255.255.0
+no shutdown
+
+#Configure HSRP
+standby 1 ip 192.168.10.254
+
+#R1 preferred/active 
+standby 1 priority 110
+standby 1 preempt
+exit
+
+#Configure R1
+int g0/0
+ip address 192.168.10.2 255.255.255.0
+no shutdown
+standby 1 ip 192.168.10.254
+standby 1 priority 100
+standby 1 preempt
+exit
+
+#Verify HSRP
+show standby
+
+#Configure PCs
+#PC1
+192.168.10.10
+#default-gateway
+192.168.10.254
+#PC2
+192.168.10.11
+#default-gateway
+192.168.10.254
+
+#Test Connectivity
+#PC1
+ping 192.168.10.254
+ping 192.168.10.11
